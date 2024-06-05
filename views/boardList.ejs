@@ -12,8 +12,8 @@
       
       <p></p>
       <div class="container input-group ml-2 my-3">
-          <input class="form-control sword" type="search" placeholder="검색어 입력">
-          <button class="btn btn-success input-group-append sbtn">검색하기</button>
+          <input class="form-control searchWord" type="search" placeholder="검색어 입력">
+          <button class="btn btn-success input-group-append searchBtn">검색하기</button>
       </div> 
 
       <table class = "table table-hover table-striped text-center container mt-4" style = "border: 1px solid;">
@@ -36,7 +36,7 @@
         </table>
 
         <div class = "container my-3">
-          <button class = 'btn btn-primary enter' style="float:right;">글쓰기</button>
+          <button class = 'btn btn-primary createBoard' style="float:right;">글쓰기</button>
         </div>
 
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -64,13 +64,13 @@
             }
           });   
 
-          $('.enter').click(function(e){
-            location.href = "/enter";       
+          $('.createBoard').click(function(e){
+            location.href = "/board";       
           })
 
-          $('.sbtn').click(function(){
-            let inputValue = $('.sword').val();
-            location.href = '\\search?value=' + inputValue;
+          $('.searchBtn').click(function(){
+            let inputValue = $('.searchWord').val();
+            location.href = '/search?value=' + inputValue;
           })
         </script>
 

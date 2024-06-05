@@ -106,10 +106,15 @@ app.post("/board", function (req, res) {
 let imagepath = '';
 
 app.post('/photo', upload.single('picture'), function(req, res){
-  
-  console.log("req.file.path : "+ req.file.path);
+  if (!req.file) {
+    // 파일이 업로드되지 않았을 경우
+    console.log("No file uploaded");
+    return res.redirect("/board");
+  }
+
+  console.log("req.file.path : " + req.file.path);
   imagepath = '\\' + req.file.path;
-})
+});
 
 // board content 페이지 - 수정, 삭제 제공
 app.get("/board/detail/:id", function (req, res) {
@@ -251,3 +256,18 @@ app.post("/signup", function (req, res) {
     });
   res.redirect("/");
 });
+
+app.get('/search', function(req, res){
+  console.log(req.query);
+  console.log(req.query.value);
+  // 검색어를 정규 표현식으로 변환하여 부분 일치를 위한 쿼리 생성
+  const searchRegex = new RegExp(req.query.value, 'i'); // 'i' 플래그는 대소문자 구분하지 않음을 의미함
+  mydb
+    .collection("hw3board")
+    .find({ title: { $regex: searchRegex } })
+    .toArray()
+    .then((result) => {
+      console.log(result);
+      res.render("searchBoard.ejs", { data: result });
+    })
+})
