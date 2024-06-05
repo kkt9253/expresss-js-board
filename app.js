@@ -16,6 +16,7 @@ mongoclient
   .connect(url)
   .then((client) => {
     mydb = client.db("myboard");
+    app.locals.db = mydb; // db를 전역으로 사용 가능하게 설정
     app.listen(8080, function () {
       console.log("포트 8080으로 서버 실행");
     });
@@ -36,6 +37,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use('/public', express.static(path.join(__dirname, "public")));
 
+// 라우터 불러오기
+const authRoutes = require("./routes/authRoutes");
+const boardRoutes = require("./routes/boardRoutes");
+
+// 라우터 사용하기
+app.use(authRoutes);
+app.use(boardRoutes);
+
+app.get("/", function (req, res) {
+
+  if (req.session.user) {
+    console.log("세션 유지");
+    res.render("index.ejs", { user: req.session.user });
+  } else {
+    console.log("user : null");
+    res.render("index.ejs", { user: null });
+  }
+});
+
+/*
 let storage = multer.diskStorage({
   destination : function(req, file, done){
     done(null, './public/image')
@@ -49,17 +70,6 @@ let upload = multer({storage:storage});
 app.get("/book", function (req, res) {
 
   res.send("도서 목록 관련 페이지입니다.");
-});
-
-app.get("/", function (req, res) {
-
-  if (req.session.user) {
-    console.log("세션 유지");
-    res.render("index.ejs", { user: req.session.user });
-  } else {
-    console.log("user : null");
-    res.render("index.ejs", { user: null });
-  }
 });
 
 // board 생성 페이지
@@ -116,7 +126,7 @@ app.post('/photo', upload.single('picture'), function(req, res){
   imagepath = '\\' + req.file.path;
 });
 
-// board content 페이지 - 수정, 삭제 제공
+// board content 페이지
 app.get("/board/detail/:id", function (req, res) {
 
   console.log(req.params.id);
@@ -271,3 +281,4 @@ app.get('/search', function(req, res){
       res.render("searchBoard.ejs", { data: result });
     })
 })
+*/
