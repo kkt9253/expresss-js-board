@@ -106,12 +106,14 @@ app.post("/board", function (req, res) {
 let imagepath = '';
 
 app.post('/photo', upload.single('picture'), function(req, res){
+  
   console.log("req.file.path : "+ req.file.path);
   imagepath = '\\' + req.file.path;
 })
 
 // board content 페이지 - 수정, 삭제 제공
 app.get("/board/detail/:id", function (req, res) {
+
   console.log(req.params.id);
   req.params.id = new ObjId(req.params.id);
   mydb
@@ -125,6 +127,7 @@ app.get("/board/detail/:id", function (req, res) {
 
 // board 수정 페이지
 app.get("/board/edit/:id", function (req, res) {
+
   req.params.id = new ObjId(req.params.id);
   mydb
     .collection("hw3board")
@@ -137,6 +140,7 @@ app.get("/board/edit/:id", function (req, res) {
 
 // board 수정 update
 app.put("/board/:id", function (req, res) {
+
   console.log(req.params);
   req.body.id = new ObjId(req.params.id);
   mydb
@@ -161,6 +165,7 @@ app.put("/board/:id", function (req, res) {
 });
 
 app.delete("/board/:id", function (req, res) {
+
   console.log('delete입니다' + req.params.id);
   let id;
   try {
@@ -180,4 +185,45 @@ app.delete("/board/:id", function (req, res) {
       console.log(err);
       res.status(500).send();
     });
+});
+
+app.get("/login", function (req, res) {
+
+  console.log("req.session");
+  console.log(req.session);
+  if (req.session.user) {
+    console.log("세션 유지");
+    res.render("index.ejs", { user: req.session.user });
+  } else {
+  console.log("로그인 페이지");
+  res.render("login.ejs");
+  }
+});
+
+app.post("/login", function (req, res) {
+  console.log("아이디 : " + req.body.userid);
+  console.log("비밀번호 : " + req.body.userpw);
+
+  mydb.collection("account").findOne({ userid: req.body.userid })
+    .then((result) => {
+      if (result && result.userpw == sha(req.body.userpw)) {
+        req.session.user = req.body;
+        console.log("새로운 로그인");
+        res.render("index.ejs", { user: req.session.user });
+      } else {
+        res.render("errorLogin.ejs");
+      }
+    })
+    .catch((err) => {
+      console.error('데이터베이스 조회 중 오류 발생:', err);
+      res.status(500).send('서버 오류가 발생했습니다.');
+    });
+});
+
+
+app.get("/logout", function (req, res) {
+
+  console.log("로그아웃");
+  req.session.destroy();
+  res.render("index.ejs", { user: null });
 });
