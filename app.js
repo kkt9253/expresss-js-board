@@ -201,6 +201,7 @@ app.get("/login", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
+
   console.log("아이디 : " + req.body.userid);
   console.log("비밀번호 : " + req.body.userpw);
 
@@ -220,10 +221,33 @@ app.post("/login", function (req, res) {
     });
 });
 
-
 app.get("/logout", function (req, res) {
 
   console.log("로그아웃");
   req.session.destroy();
   res.render("index.ejs", { user: null });
+});
+
+app.get("/signup", function (req, res) {
+  res.render("signup.ejs");
+});
+
+app.post("/signup", function (req, res) {
+  console.log(req.body.userid);
+  console.log(sha(req.body.userpw));
+  console.log(req.body.usergroup);
+  console.log(req.body.useremail);
+
+  mydb
+    .collection("account")
+    .insertOne({
+      userid: req.body.userid,
+      userpw: sha(req.body.userpw),
+      usergroup: req.body.usergroup,
+      useremail: req.body.useremail,
+    })
+    .then((result) => {
+      console.log("회원가입 성공");
+    });
+  res.redirect("/");
 });
