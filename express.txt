@@ -1,0 +1,21 @@
+package.json 생성
+npm init
+
+node_modules폴더 생성, 패키지 의존성
+npm i express
+
+npm i ejs
+npm i mongodb
+npm i nodemon
+npm i sha256
+npm i multer
+npm i express-session
+npm i body-parser
+npm i 
+npm i 
+npm i 
+npm i 
+npm i 
+
+
+mysql mongodb 같이 쓰기
