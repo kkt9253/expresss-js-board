@@ -1,2 +1,2 @@
 # expresss-js-board
-대학교 고급웹프로그래밍 웹사이트 만들기
+express 사용하여 게시판 만들어보기
