@@ -8,7 +8,8 @@ let imagepathArray = [];
 
 let storage = multer.diskStorage({
   destination: function (req, file, done) {
-    done(null, './public/image');
+    //done(null, './public/image');
+    done(null, './public/uploads');
   },
   filename: function (req, file, done) {
     done(null, file.originalname);
@@ -18,7 +19,9 @@ let storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 var multipleUpload = upload.fields([
-  { name : 'picture', maxCount: 1 }, { name : 'pictures', maxCount: 3 }
+  { name : 'picture', maxCount: 1 }, 
+  { name : 'pictures', maxCount: 3 },
+  { name : 'file', maxCount: 1 }
 ])
 
 router.get("/board", function (req, res) {
@@ -63,6 +66,9 @@ router.post("/board", multipleUpload, function (req, res) {
     req.files['pictures'].forEach(file => {
       imagepathArray.push('\\' + file.path);
     });
+  }
+  if (req.files['file']) {
+    imagepathArray.push('\\' + req.files['file'][0].path);
   }
 
   db.collection("hw3board").insertOne({
@@ -118,7 +124,8 @@ router.put("/board/:id", function (req, res) {
         title: req.body.title, 
         content: req.body.content, 
         date: req.body.someDate , 
-        path: req.body.imagepath
+        //path: req.body.imagepath
+        paths: req.body.imagepathArray ? req.body.imagepathArray.split(',') : [] // 파일 경로 배열을 저장
       } 
     }
   )

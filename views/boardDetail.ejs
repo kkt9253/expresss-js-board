@@ -23,6 +23,7 @@
           <% if (data.paths && data.paths.length > 0) { %>
             <% data.paths.forEach(function(path) { %>
               <img src="<%= path %>" width="200" height="" alt="Image"><p></p>
+              <a href="<%= path %>" download><%= path.split('\\').pop() %></a><br>
             <% }); %>
           <% } %>
           <p class="card-subtitle mb-2">작성일 : <%= data.date %></p>
