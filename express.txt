@@ -1,0 +1,35 @@
+package.json 생성
+npm init
+
+node_modules폴더 생성, 패키지 의존성
+npm i express
+
+npm i ejs
+npm i mongodb
+npm i nodemon
+npm i sha256
+npm i multer
+npm i express-session
+npm i body-parser
+npm i path
+npm install method-override
+npm i 
+npm i 
+npm i 
+
+mysql mongodb 같이 쓰기
+
+제목 내용 작성일 내용 비어있으면 경고메시지와 함께 저장 안되기
+
+목록에서 삭제 옆에 수정 추가하기
+
+상세 게시판에서 수정 옆에 삭제 추가하기
+
+로그인한 유저가 만든 게시물만 수정 삭제 보이게 하기
+
+수정하기 란에 사진도 수정 넣을 수 있게 하기
+
+파일 종류 다르게 가능하게 하기
+
+파일 여러개 가능하게 하기
+

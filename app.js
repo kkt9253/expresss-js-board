@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 let multer = require('multer');
 let session = require("express-session");
+const methodOverride = require("method-override");
 const { error } = require("console");
 
 const url = "mongodb://localhost:27017/myboard";
@@ -34,6 +35,7 @@ app.use(
 );
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
 app.use('/public', express.static(path.join(__dirname, "public")));
 
@@ -44,6 +46,12 @@ const boardRoutes = require("./routes/boardRoutes");
 // 라우터 사용하기
 app.use(authRoutes);
 app.use(boardRoutes);
+
+/* 이렇게 줄여도 됨
+app.use('/', require('./routes/post.js'))
+app.use('/', require('./routes/add.js'))
+app.use('/', require('./routes/auth.js'))
+*/
 
 app.get("/", function (req, res) {
 

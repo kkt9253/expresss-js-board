@@ -21,7 +21,7 @@
           <tr>         
             <th>제목</th>
             <th>작성일</th>
-            <th>삭제</th>
+            <th>삭제-수정</th>
           </tr>
         </thead>
         <tbody>
@@ -29,7 +29,10 @@
           <tr>         
             <td><a href = "/board/detail/<%= data[i]._id %>"><%= data[i].title %></a></td>
             <td><%= data[i].date %></td>
-            <td><button class = 'delete btn btn-outline-danger' data-id = '<%= data[i]._id %>'>삭제</button></td>
+            <td>
+              <button class = 'delete btn btn-outline-danger' data-id = '<%= data[i]._id %>'>삭제</button>
+            <button class = 'update btn btn-outline-warning' data-id = '<%= data[i]._id %>'>수정</button>
+          </td>
           </tr>
         <% } %>
         </tbody>            
@@ -62,7 +65,12 @@
                 }
               });
             }
-          });   
+          });
+
+          $('.update').click(function(e) {
+            let sid = $(this).data('id');
+            location.href = '/board/edit/' + sid;
+          })
 
           $('.createBoard').click(function(e){
             location.href = "/board";       

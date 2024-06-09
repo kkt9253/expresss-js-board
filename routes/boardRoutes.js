@@ -3,6 +3,8 @@ const router = express.Router();
 const { ObjectId } = require("mongodb");
 const multer = require("multer");
 
+let imagepath = '';
+
 router.get("/board", function (req, res) {
   res.render("createBoard.ejs");
 });
@@ -36,8 +38,10 @@ router.get("/board/detail/:id", function (req, res) {
   const db = req.app.locals.db;
 
   const id = new ObjectId(req.params.id);
+  console.log(id);
   db.collection("hw3board").findOne({ _id: id })
     .then((result) => {
+      console.log(result);
       res.render("boardDetail.ejs", { data: result });
     });
 });
@@ -53,12 +57,21 @@ router.get("/board/edit/:id", function (req, res) {
 });
 
 router.put("/board/:id", function (req, res) {
+  console.log("PUT request received");
   const db = req.app.locals.db;
-
   const id = new ObjectId(req.params.id);
+  //const id = req.body.id;
+
   db.collection("hw3board").updateOne(
     { _id: id },
-    { $set: { title: req.body.title, content: req.body.content, date: req.body.someDate } }
+    { 
+      $set: { 
+        title: req.body.title, 
+        content: req.body.content, 
+        date: req.body.someDate , 
+        path: req.body.imagepath
+      } 
+    }
   )
   .then((result) => {
     res.redirect("/board/list");

@@ -17,8 +17,8 @@
         <div class="card-body">
           <p class="card-text">내용 : <%= data.content %></p>
           <!-- <img src = "flower.jpg"  alt="No image" width = "200"/><p></p>    -->
-          <% if (data.path) { %>
-          <img src = "<%= data.path %>"  width = "500" height=""/><p></p>
+          <% if (data.imagepath) { %>
+          <img src = "<%= data.imagepath %>"  width = "500" height=""/><p></p>
           <% } %>
           <p class="card-subtitle mb-2">작성일 : <%= data.date %></p>
           <a href="/board/edit/<%= data._id %>" class="card-link">수정하기</a>

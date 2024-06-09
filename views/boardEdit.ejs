@@ -10,8 +10,7 @@
     <%- include('menu.html') %> 
       
     <div class = "container mt-4">
-      <form action = "/board" method="post">
-        <input type="hidden" name="_method" value="PUT"> <!-- 해당 부문을 통해 form태그를 통해 put, delete 메서드 사용 가능 -->
+      <form action = "/board/<%= data._id %>?_method=PUT" method="post">
           <div class = "form-group">
           <label>제목</label>
           <input type="text" value = "<%= data._id %>" name = "id" style = "display:none;">
@@ -24,7 +23,8 @@
           <div class="form-group">
           <label>작성일</label>
           <input type="date" value = "<%= data.date %>" class="form-control" name ="someDate">
-          </div><p></p>                
+          </div><p></p>
+          <input type="hidden" value="<%= data.imagepath %>" name="imagepath">
           <button type = "submit" class="btn btn-warning" style="float:right">수정</button>
       </form>
     </div>
