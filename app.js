@@ -18,7 +18,7 @@ mongoclient
   .then((client) => {
     mydb = client.db("myboard");
     app.locals.db = mydb; // db를 전역으로 사용 가능하게 설정
-    app.listen(8080, function () {
+    app.listen(8081, function () {
       console.log("포트 8080으로 서버 실행");
     });
   })

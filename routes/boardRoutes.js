@@ -4,6 +4,22 @@ const { ObjectId } = require("mongodb");
 const multer = require("multer");
 
 let imagepath = '';
+let imagepathArray = [];
+
+let storage = multer.diskStorage({
+  destination: function (req, file, done) {
+    done(null, './public/image');
+  },
+  filename: function (req, file, done) {
+    done(null, file.originalname);
+  }
+});
+
+var upload = multer({ storage: storage });
+
+var multipleUpload = upload.fields([
+  { name : 'picture', maxCount: 1 }, { name : 'pictures', maxCount: 3 }
+])
 
 router.get("/board", function (req, res) {
   res.render("createBoard.ejs");
@@ -18,6 +34,7 @@ router.get("/board/list", function (req, res) {
     });
 });
 
+/* 이미지 하나 첨부
 router.post("/board", function (req, res) {
   const db = req.app.locals.db;
 
@@ -32,6 +49,38 @@ router.post("/board", function (req, res) {
     console.log("데이터 추가 성공");
   });
   res.redirect("/board/list");
+});
+*/
+
+// 다중 이미지 저장 api
+router.post("/board", multipleUpload, function (req, res) {
+  const db = req.app.locals.db;
+
+  if (req.files['picture']) {
+    imagepathArray.push('\\' + req.files['picture'][0].path);
+  }
+  if (req.files['pictures']) {
+    req.files['pictures'].forEach(file => {
+      imagepathArray.push('\\' + file.path);
+    });
+  }
+
+  db.collection("hw3board").insertOne({
+    title: req.body.title,
+    content: req.body.content,
+    date: req.body.someDate,
+    paths: imagepathArray // 여러 이미지 경로 배열을 저장
+  })
+  .then((result) => {
+    console.log(result);
+    console.log("데이터 추가 성공");
+    imagepathArray = []; // 이미지 경로 배열 초기화
+    res.redirect("/board/list");
+  })
+  .catch((err) => {
+    console.log("데이터 추가 실패:", err);
+    res.status(500).send("데이터 추가 실패");
+  });
 });
 
 router.get("/board/detail/:id", function (req, res) {
@@ -105,17 +154,7 @@ router.get('/search', function (req, res) {
     });
 });
 
-let storage = multer.diskStorage({
-  destination: function (req, file, done) {
-    done(null, './public/image');
-  },
-  filename: function (req, file, done) {
-    done(null, file.originalname);
-  }
-});
-
-let upload = multer({ storage: storage });
-
+/* 
 router.post('/photo', upload.single('picture'), function (req, res) {
   
   if (!req.file) {
@@ -126,5 +165,5 @@ router.post('/photo', upload.single('picture'), function (req, res) {
   console.log("req.file.path : " + req.file.path);
   imagepath = '\\' + req.file.path;
 });
-
+*/
 module.exports = router;
